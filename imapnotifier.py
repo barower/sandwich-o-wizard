@@ -1,5 +1,7 @@
 from imapclient import  IMAPClient
 from folder import Folder
+import email
+from email.header import decode_header, make_header
 import time
 import os
 import sys
@@ -22,8 +24,13 @@ if __name__ == "__main__":
 
     jedzenie = Folder(server, "Jedzenie")
 
+    server.select_folder('INBOX', readonly=True)
+
     while True:
         print("Checking emails")
+        for uid in server.search(criteria=[u'UNSEEN']):
+            subject = (str(make_header(decode_header(str(server.fetch(uid, 'ENVELOPE')[uid][b'ENVELOPE'].subject)))).lower())
+            print(subject)
 
         time.sleep(SLEEP_TIME)
         os.system("clear")
