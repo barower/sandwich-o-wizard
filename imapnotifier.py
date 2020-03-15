@@ -26,9 +26,9 @@ def get_subject(server, uid):
     server.close_folder()
     return subject
 
-def get_unseen_uids(server):
+def get_uids(server, search_criteria):
     server.select_folder('INBOX', readonly=True)
-    retval = server.search(criteria=[u'UNSEEN'])
+    retval = server.search(criteria=search_criteria)
     server.close_folder()
     return retval
 
@@ -52,9 +52,12 @@ if __name__ == "__main__":
 
     catering_folder = Folder(server, "Jedzenie")
 
+    with open("search_criteria", "r") as f:
+        search_criteria = f.read().split()
+
     while True:
         print("Checking emails")
-        for uid in get_unseen_uids(server):
+        for uid in get_uids(server, search_criteria):
             subject = get_subject(server, uid).lower()
             if filt.do_filter(subject):
                 print(subject + " in filters, moving")
