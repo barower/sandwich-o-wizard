@@ -1,6 +1,6 @@
 from imapclient import  IMAPClient
 from folder import Folder
-from mailfilter import Filter
+from mailfilter import Mailfilter
 import email
 from email.header import decode_header, make_header
 import time
@@ -8,8 +8,6 @@ import os
 import sys
 
 SLEEP_TIME = 1.5
-
-filtry = 'kanapki ślimak slimak catering sushi'
 
 def login():
     with open("passes") as f:
@@ -42,6 +40,14 @@ def mail_move(server, uid, folder):
 
 if __name__ == "__main__":
 
+    filt = Mailfilter()
+
+    filt.add_filter("kanapki", "~/Sounds/playsound.sh kanapki")
+    filt.add_filter("slimak", "~/Sounds/playsound.sh slimak")
+    filt.add_filter("ślimak", "~/Sounds/playsound.sh slimak")
+    filt.add_filter("sushi", "~/Sounds/playsound.sh sushi")
+    filt.add_filter("catering", "~/Sounds/playsound.sh catering50")
+
     server = login()
 
     catering_folder = Folder(server, "Jedzenie")
@@ -50,10 +56,12 @@ if __name__ == "__main__":
         print("Checking emails")
         for uid in get_unseen_uids(server):
             subject = get_subject(server, uid).lower()
-            if subject in filtry:
+            if filt.do_filter(subject):
                 print(subject + " in filters, moving")
                 mail_move(server, uid, catering_folder.folder)
 
+
+        filt.run_pending_scripts()
         time.sleep(SLEEP_TIME)
         os.system("clear")
 
