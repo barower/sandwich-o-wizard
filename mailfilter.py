@@ -17,7 +17,7 @@ class Mailfilter:
 
     def do_filter(self, inputstr):
         for inst in self.__filterinstances:
-            if inputstr in inst.filterstring:
+            if inst.filterstring in inputstr:
                 inst.set_script_pending()
                 return True
         return False
