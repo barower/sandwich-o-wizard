@@ -8,6 +8,8 @@ import sys
 
 SLEEP_TIME = 1.5
 
+filtry = 'kanapki ślimak slimak catering sushi'
+
 def login():
     with open("passes") as f:
         text = f.read().split()
@@ -17,6 +19,11 @@ def login():
         server = IMAPClient(url, use_uid=True)
         server.login(login, password)
         return server
+
+def get_subject(server, uid):
+    subject = str(make_header(decode_header(str(server.fetch(uid, 'ENVELOPE')[uid][b'ENVELOPE'].subject))))
+    subject = subject[2:-1].strip()
+    return subject
 
 if __name__ == "__main__":
 
@@ -29,8 +36,9 @@ if __name__ == "__main__":
     while True:
         print("Checking emails")
         for uid in server.search(criteria=[u'UNSEEN']):
-            subject = (str(make_header(decode_header(str(server.fetch(uid, 'ENVELOPE')[uid][b'ENVELOPE'].subject)))).lower())
-            print(subject)
+            subject = get_subject(server, uid).lower()
+            if subject in filtry:
+                print(subject + " is in filter list")
 
         time.sleep(SLEEP_TIME)
         os.system("clear")
