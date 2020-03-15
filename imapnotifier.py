@@ -21,24 +21,37 @@ def login():
         return server
 
 def get_subject(server, uid):
+    server.select_folder('INBOX', readonly=True)
     subject = str(make_header(decode_header(str(server.fetch(uid, 'ENVELOPE')[uid][b'ENVELOPE'].subject))))
     subject = subject[2:-1].strip()
+    server.close_folder()
     return subject
+
+def get_unseen_uids(server):
+    server.select_folder('INBOX', readonly=True)
+    retval = server.search(criteria=[u'UNSEEN'])
+    server.close_folder()
+    return retval
+
+def mail_move(server, uid, folder):
+    server.select_folder('INBOX', readonly=False)
+    server.copy(uid, folder)
+    server.delete_messages(uid)
+    server.close_folder()
 
 if __name__ == "__main__":
 
     server = login()
 
-    jedzenie = Folder(server, "Jedzenie")
-
-    server.select_folder('INBOX', readonly=True)
+    catering_folder = Folder(server, "Jedzenie")
 
     while True:
         print("Checking emails")
-        for uid in server.search(criteria=[u'UNSEEN']):
+        for uid in get_unseen_uids(server):
             subject = get_subject(server, uid).lower()
             if subject in filtry:
-                print(subject + " is in filter list")
+                print(subject + " in filters, moving")
+                mail_move(server, uid, catering_folder.folder)
 
         time.sleep(SLEEP_TIME)
         os.system("clear")
