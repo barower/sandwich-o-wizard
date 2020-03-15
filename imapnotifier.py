@@ -60,7 +60,6 @@ if __name__ == "__main__":
                 print(subject + " in filters, moving")
                 mail_move(server, uid, catering_folder.folder)
 
-
         filt.run_pending_scripts()
         time.sleep(SLEEP_TIME)
         os.system("clear")

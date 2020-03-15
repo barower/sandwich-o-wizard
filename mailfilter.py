@@ -2,31 +2,31 @@ import os
 
 class Mailfilter:
     def __init__(self):
-        self.__filterinstances = []
+        self.__subject_filters = []
 
     def add_filter(self, string, script_on_detection):
-        self.__filterinstances.append(Filterinstance(string, script_on_detection))
+        self.__subject_filters.append(SubjectFilter(string, script_on_detection))
 
     def get_filter_list(self):
         retstr = ""
 
-        for inst in self.__filterinstances:
+        for inst in self.__subject_filters:
             retstr = retstr + " " +  inst.filterstring
 
         return retstr.strip()
 
     def do_filter(self, inputstr):
-        for inst in self.__filterinstances:
+        for inst in self.__subject_filters:
             if inst.filterstring in inputstr:
                 inst.set_script_pending()
                 return True
         return False
 
     def run_pending_scripts(self):
-        for inst in self.__filterinstances:
+        for inst in self.__subject_filters:
             inst.run_script()
 
-class Filterinstance:
+class SubjectFilter:
     def __init__(self, string, script_on_detection):
         self.filterstring = string
         self.script = script_on_detection
