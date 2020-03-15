@@ -14,7 +14,7 @@ def login():
         text = f.read().split()
         url = text[0]
         login = text[1]
-        password = text[2]
+        password = input("Password to {}@{}: ".format(url, login))
         server = IMAPClient(url, use_uid=True)
         server.login(login, password)
         return server
