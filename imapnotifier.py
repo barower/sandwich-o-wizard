@@ -1,5 +1,6 @@
 from imapclient import  IMAPClient
 from folder import Folder
+from mailfilter import Filter
 import email
 from email.header import decode_header, make_header
 import time
