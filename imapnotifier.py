@@ -57,11 +57,16 @@ if __name__ == "__main__":
 
     while True:
         print("Checking emails")
-        for uid in get_uids(server, search_criteria):
-            subject = get_subject(server, uid).lower()
-            if filt.do_filter(subject):
-                print(subject + " in filters, moving")
-                mail_move(server, uid, catering_folder.folder)
+
+        try:
+            for uid in get_uids(server, search_criteria):
+                subject = get_subject(server, uid).lower()
+                if filt.do_filter(subject):
+                    print(subject + " in filters, moving")
+                    mail_move(server, uid, catering_folder.folder)
+        except Exception as ex:
+            print("ERROR: {}".format(ex))
+
 
         filt.run_pending_scripts()
         time.sleep(SLEEP_TIME)
