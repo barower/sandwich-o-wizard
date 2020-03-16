@@ -6,6 +6,7 @@ from email.header import decode_header, make_header
 import time
 import os
 import sys
+from getpass import getpass
 
 SLEEP_TIME = 1.5
 
@@ -14,7 +15,7 @@ def login():
         text = f.read().split()
         url = text[0]
         login = text[1]
-        password = input("Password to {}@{}: ".format(url, login))
+        password = getpass("Password to {}@{}: ".format(url, login))
         server = IMAPClient(url, use_uid=True)
         server.login(login, password)
         return server
