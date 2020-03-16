@@ -7,6 +7,7 @@ import time
 import os
 import sys
 from getpass import getpass
+import logging
 
 SLEEP_TIME = 1.5
 
@@ -53,20 +54,22 @@ if __name__ == "__main__":
 
     catering_folder = Folder(server, "Jedzenie")
 
+    logging.basicConfig(filename='imapfilter.log', level=logging.INFO)
+
     with open("search_criteria", "r") as f:
         search_criteria = f.read().split()
 
     while True:
-        print("Checking emails")
+        logging.debug("Checking emails")
 
         try:
             for uid in get_uids(server, search_criteria):
                 subject = get_subject(server, uid).lower()
                 if filt.do_filter(subject):
-                    print(subject + " in filters, moving")
+                    logging.info(subject + " in filters, moving")
                     mail_move(server, uid, catering_folder.folder)
         except Exception as ex:
-            print("ERROR: {}".format(ex))
+            logging.error("{}".format(ex))
 
 
         filt.run_pending_scripts()
