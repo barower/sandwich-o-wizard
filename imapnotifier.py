@@ -50,11 +50,11 @@ if __name__ == "__main__":
     filt.add_filter("sushi", "~/Sounds/playsound.sh sushi")
     filt.add_filter("catering", "~/Sounds/playsound.sh catering50")
 
+    logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s', filename='imapfilter.log', level=logging.INFO)
+
     server = login()
 
     catering_folder = Folder(server, "Jedzenie")
-
-    logging.basicConfig(filename='imapfilter.log', level=logging.INFO)
 
     with open("search_criteria", "r") as f:
         search_criteria = f.read().split()
