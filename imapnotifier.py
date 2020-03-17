@@ -44,15 +44,17 @@ if __name__ == "__main__":
 
     filt = Mailfilter()
 
-    filt.add_filter("kanapki", "~/Sounds/playsound.sh kanapki")
-    filt.add_filter("slimak", "~/Sounds/playsound.sh slimak")
-    filt.add_filter("ślimak", "~/Sounds/playsound.sh slimak")
-    filt.add_filter("sushi", "~/Sounds/playsound.sh sushi")
-    filt.add_filter("catering", "~/Sounds/playsound.sh catering50")
+    filt.add_filter("kanapki", "play /home/pi/Sounds/kanapkiv3.wav -q")
+    filt.add_filter("slimak", "play /home/pi/Sounds/slimakv3.wav -q")
+    filt.add_filter("ślimak", "play /home/pi/Sounds/slimakv3.wav -q")
+    filt.add_filter("sushi", "play /home/pi/Sounds/sushiv3.wav -q")
+    filt.add_filter("catering", "play /home/pi/Sounds/catering50v3.wav -q")
 
-    logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s', filename='imapfilter.log', level=logging.INFO)
+    logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s', filename='imapnotifier.log', level=logging.INFO)
 
     server = login()
+
+    print("Login okay.")
 
     catering_folder = Folder(server, "Jedzenie")
 
@@ -74,5 +76,4 @@ if __name__ == "__main__":
 
         filt.run_pending_scripts()
         time.sleep(SLEEP_TIME)
-        os.system("clear")
 

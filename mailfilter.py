@@ -1,4 +1,4 @@
-import os
+import subprocess
 
 class Mailfilter:
     def __init__(self):
@@ -37,17 +37,17 @@ class SubjectFilter:
 
     def run_script(self):
         if self.script_pending:
-            os.system(self.script)
+            subprocess.check_call(self.script.split())
             self.script_pending = False
 
 
 if __name__ == "__main__":
     filt = Mailfilter()
-    filt.add_filter("kanapki", "~/Sounds/playsound.sh kanapki")
-    filt.add_filter("slimak", "~/Sounds/playsound.sh slimak")
-    filt.add_filter("ślimak", "~/Sounds/playsound.sh slimak")
-    filt.add_filter("sushi", "~/Sounds/playsound.sh sushi")
-    filt.add_filter("catering", "~/Sounds/playsound.sh catering50")
+    filt.add_filter("kanapki", "play /home/pi/Sounds/kanapkiv3.wav -q")
+    filt.add_filter("slimak", "play /home/pi/Sounds/slimakv3.wav -q")
+    filt.add_filter("ślimak", "play /home/pi/Sounds/slimakv3.wav -q")
+    filt.add_filter("sushi", "play /home/pi/Sounds/sushiv3.wav -q")
+    filt.add_filter("catering", "play /home/pi/Sounds/catering50v3.wav -q")
 
     filt.do_filter("ślimak")
     filt.do_filter("kanapki")
